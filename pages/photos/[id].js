@@ -1,19 +1,28 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
-function index({ photo }) {
+function Photo({ photo }) {
+  const router = useRouter();
+
   return (
     <div>
-      <h2>{photo.title}</h2>
-      <Image //
-        src={photo.url}
-        alt={photo.title}
-        width="100"
-        height="100"
-      />
-      <Link href="/photos">
-        <a>&larr; go back</a>
-      </Link>
+      {router.isFallback ? (
+        <span>Loading...</span>
+      ) : (
+        <>
+          <h2>{photo.title}</h2>
+          <Image //
+            src={photo.url}
+            alt={photo.title}
+            width="100"
+            height="100"
+          />
+          <Link href="/photos">
+            <a>&larr; go back</a>
+          </Link>
+        </>
+      )}
     </div>
   );
 }
@@ -34,7 +43,7 @@ export const getStaticPaths = async () => {
         id: photo.id.toString(),
       },
     })),
-    fallback: false,
+    fallback: true,
   };
 };
 
@@ -50,4 +59,4 @@ export const getStaticProps = async (context) => {
   };
 };
 
-export default index;
+export default Photo;
